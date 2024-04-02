@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Chatroom</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+    <div id="messages"></div>
+    <input type="text" id="inputMessage" placeholder="Type your message..." />
+    <button onclick="sendMessage()">Send</button>
+
+    <script>
+        const messages = document.getElementById('messages');
+
+        function displayMessage(message) {
+            const messageElement = document.createElement('div');
+            messageElement.textContent = message;
+            messages.appendChild(messageElement);
+        }
+
+        function sendMessage() {
+            const inputMessage = document.getElementById('inputMessage');
+            const message = inputMessage.value;
+            displayMessage(`You: ${message}`);
+            inputMessage.value = '';
+        }
+
+        const socket = new WebSocket('ws://localhost:5555');
+
+        socket.addEventListener('message', function (event) {
+            const message = event.data;
+            displayMessage(message);
+        });
+    </script>
+</body>
+
+</html>
