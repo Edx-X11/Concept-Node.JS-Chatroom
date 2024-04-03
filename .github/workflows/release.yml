@@ -1,0 +1,29 @@
+name: Create Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        
+      - name: Create release directory
+        run: mkdir -p release
+        
+      - name: Copy files to release directory
+        run: find . -maxdepth 1 -not -name 'release' -exec cp -r {} release/ \;
+        
+      - name: Compress files
+        run: zip -r website.zip release/
+        
+      - name: Upload release artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: website
+          path: website.zip
